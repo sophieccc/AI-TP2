@@ -36,7 +36,7 @@ public:
     // Return the number of stacks
     int getNbBlocks();
     // Return the number of blocks;
-
+    int getTop(int x);
 
     bool emptyStack(int s);
     // Precondition: 0 <= s < getNbStacks()
@@ -145,7 +145,10 @@ void State::display() const{
 int State::getNbStacks(){
     return nbStacks;
 }
-
+int State::getTop(int i)
+{
+    return top[i];
+}
 bool State::emptyStack(int s){
     // Precondition: 0 <= s < getNbStacks()
     // Return true if stack s has no block

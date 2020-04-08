@@ -112,6 +112,7 @@ addNeighbor( State &currentState, Move &move,
 
 void
 search( State& currentState,
+        int h,
         int          ub, // upper bound over which exploration must stop
         int&         nub,
         list<State>& path,
@@ -131,13 +132,21 @@ search( State& currentState,
   }
 
   // generate the neighbors
-  int s = side( currentState );
+  //int s = side( currentState );
   vector< pair< Move,int > > neighbors;
   neighbors.clear();
   
-  int pos0 = find( currentState.begin(), currentState.end(), 0 ) - currentState.begin();
+  for(int i=0; i<currentState.getNbStacks();i++)
+  {
+    if(currentState.getTop(i)!=-1)
+    {
+        int currentBlock=currentState.getTop(i);
+        //for()
+    }
+  }
+  //int pos0 = find( currentState.begin(), currentState.end(), 0 ) - currentState.begin();
   
-  if( (pos0 + 1) < currentState.size() &&
+  /*if( (pos0 + 1) < currentState.size() &&
       ((pos0 + 1) % s) != 0 )
   {
     Move move = make_pair( pos0, pos0 + 1 );
@@ -161,7 +170,7 @@ search( State& currentState,
   {
     Move move = make_pair( pos0, pos0 - s );
     addNeighbor( currentState, move, neighbors, path, h );
-  }
+  }*/
 
   // sort the neighbors by heuristic value
 
@@ -186,7 +195,7 @@ search( State& currentState,
     {
       currentState.doMove(p.first);
       path.push_back( currentState );
-      search( currentState, ub, nub, path, bestPath, nbVisitedState );
+      search( currentState, currentState.heuristic(false),ub, nub, path, bestPath, nbVisitedState );
       path.pop_back(); 
       Move newMove = p.first;
       int first=newMove.first;
@@ -215,7 +224,7 @@ ida( State&        initialState,
     nub = numeric_limits<int>::max();
 
     cout << "upper bound: " << ub;
-    search( initialState, ub, nub, path, bestPath, nbVisitedState );
+    search( initialState,initialState.heuristic(false), ub, nub, path, bestPath, nbVisitedState );
     cout << " ; nbVisitedState: " << nbVisitedState << endl;
   }
 }
