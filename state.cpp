@@ -37,6 +37,8 @@ public:
     int getNbBlocks();
     // Return the number of blocks;
     int getTop(int x);
+    
+    int getStack(int b);
 
     bool emptyStack(int s);
     // Precondition: 0 <= s < getNbStacks()
@@ -145,10 +147,17 @@ void State::display() const{
 int State::getNbStacks(){
     return nbStacks;
 }
+
 int State::getTop(int i)
 {
     return top[i];
 }
+
+int State::getStack(int b)
+{
+    return stack[b];
+}
+
 bool State::emptyStack(int s){
     // Precondition: 0 <= s < getNbStacks()
     // Return true if stack s has no block
@@ -192,7 +201,6 @@ int State::compare(const int* stack2, const int* top2, const int* next2) const{
 int State::heuristic(bool second)
 {
     int mis=0;
-
     for (int i=0; i<nbBlocs; i++)
     {
         if(stack[i]!=nbStacks-1)
@@ -200,33 +208,23 @@ int State::heuristic(bool second)
             mis++;            
         }
     }
-
     if(second)
     {
         for (int j=0; j<nbBlocs; j++)
         {
-            if(stack[j]==nbStacks-1 && top[stack[j]]==j)
-            {
-                int previous=j;
-                int count=0;
-                while (next[previous]!=-1 && next[previous]==previous+1)
+            while(next[j]!=-1) {
+                if(stack[j]!=nbStacks-1)
                 {
-                    previous=next[previous];
-                    count++;
+                    mis+=2;
+                    break;
                 }
-                if(next[previous]!=-1)
-                {
-                    while(next[previous]!=-1)
-                    {
-                        previous=next[previous];
-                        count++;
-                    }
-                    mis+=2*count;
-                }
+                j = next[j];
+            }
+            if(j != nbBlocs - 1){ //le dernier bloc n'est pas le bon
+                mis+=2;
             }
         }
     }
-    
     return mis;
 }
 

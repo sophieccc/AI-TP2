@@ -96,7 +96,7 @@ doMove( State &state, const Move &move )
 void
 addNeighbor( State &currentState, Move &move, 
              vector< pair< Move,int > > &neighbors,
-             list<State>& path )
+             list<State>& path, int h)
 {
   currentState.doMove(move);
   if( find( path.begin(), path.end(), currentState ) == path.end() )
@@ -141,7 +141,10 @@ search( State& currentState,
     if(currentState.getTop(i)!=-1)
     {
         int currentBlock=currentState.getTop(i);
-        //for()
+        for(int j=0; j<currentState.getNbStacks() && j!=currentState.getStack(i);j++) {
+          Move move = make_pair(i,j);
+          addNeighbor(currentState, move, neighbors, path, h);
+        }
     }
   }
   //int pos0 = find( currentState.begin(), currentState.end(), 0 ) - currentState.begin();
