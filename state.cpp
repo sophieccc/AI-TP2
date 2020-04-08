@@ -21,7 +21,7 @@ public:
     // Precondition: 0 <= m.first < getNbStacks(), 0 <= m.second < getNbStacks(), and !emptyStack(m.first)
     // Postrelation: Apply the move (m.first->m.second) to this
     
-    int heuristic();
+    int heuristic(bool second);
     // Return a lower bound on the minimal number of moves necessary to transform this into the final state
     
     void display() const;
@@ -34,7 +34,10 @@ public:
     
     int getNbStacks();
     // Return the number of stacks
-    
+    int getNbBlocks();
+    // Return the number of blocks;
+
+
     bool emptyStack(int s);
     // Precondition: 0 <= s < getNbStacks()
     // Return true if stack s has no block
@@ -181,6 +184,47 @@ int State::compare(const int* stack2, const int* top2, const int* next2) const{
         if (top[s]>top2[s]) return 1;
     }
     return 0;
+}
+
+int State::heuristic(bool second)
+{
+    int mis=0;
+
+    for (int i=0; i<nbBlocs; i++)
+    {
+        if(stack[i]!=nbStacks-1)
+        {
+            mis++;            
+        }
+    }
+
+    if(second)
+    {
+        for (int j=0; j<nbBlocs; j++)
+        {
+            if(stack[j]==nbStacks-1 && top[stack[j]]==j)
+            {
+                int previous=j;
+                int count=0;
+                while (next[previous]!=-1 && next[previous]==previous+1)
+                {
+                    previous=next[previous];
+                    count++;
+                }
+                if(next[previous]!=-1)
+                {
+                    while(next[previous]!=-1)
+                    {
+                        previous=next[previous];
+                        count++;
+                    }
+                    mis+=2*count;
+                }
+            }
+        }
+    }
+    
+    return mis;
 }
 
 
