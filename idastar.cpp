@@ -257,7 +257,8 @@ main()
   cout << "nb moves: " << bestPath.size()-1 << endl;
   cout << "nb visited states: " << nbVisitedState << endl;
 
-  for( const State& s : bestPath ) s.display();
-  
+  for( const State& s : bestPath ) {
+    s.display();
+  }
   return 0;
 }
