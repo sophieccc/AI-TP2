@@ -118,6 +118,7 @@ addNeighbor( State &currentState, Move &move,
     neighbors.push_back( make_pair( move, h(currentState) ) );
   }
   doMove( currentState, move ); // undo move
+  // *** CHANGE SO IT REVERSES IT PROPERLY !!!!! ***
 }
 
 void
@@ -200,6 +201,7 @@ search( State& currentState,
       search( currentState, ub, nub, path, bestPath, h, nbVisitedState );
       path.pop_back();
       doMove( currentState, p.first ); // undo move
+      // *** CHANGE SO IT REVERSES IT PROPERLY !!!!! ***
       if( !bestPath.empty() ) return;
     }
   }
