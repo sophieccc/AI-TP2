@@ -96,7 +96,7 @@ doMove( State &state, const Move &move )
 void
 addNeighbor( State &currentState, Move &move, 
              vector< pair< Move,int > > &neighbors,
-             list<State>& path, int h)
+             list<State>& path)
 {
   currentState.doMove(move);
   if( find( path.begin(), path.end(), currentState ) == path.end() )
@@ -107,12 +107,10 @@ addNeighbor( State &currentState, Move &move,
   newMove.first=move.second;
   newMove.second=move.first;
   currentState.doMove( newMove ); // undo move
-  // *** CHANGE SO IT REVERSES IT PROPERLY !!!!! ***
 }
 
 void
 search( State& currentState,
-        int h,
         int          ub, // upper bound over which exploration must stop
         int&         nub,
         list<State>& path,
@@ -140,11 +138,11 @@ search( State& currentState,
   {
     if(currentState.getTop(i)!=-1)
     {
-        int currentBlock=currentState.getTop(i);
-        for(int j=0; j<currentState.getNbStacks() && j!=currentState.getStack(i);j++) {
-          Move move = make_pair(i,j);
-          addNeighbor(currentState, move, neighbors, path, h);
-        }
+      int currentBlock=currentState.getTop(i);
+      for(int j=0; j<currentState.getNbStacks() && j!=currentState.getStack(i);j++) {
+        Move move = make_pair(i,j);
+        addNeighbor(currentState, move, neighbors, path);
+      }
     }
   }
   //int pos0 = find( currentState.begin(), currentState.end(), 0 ) - currentState.begin();
@@ -198,14 +196,13 @@ search( State& currentState,
     {
       currentState.doMove(p.first);
       path.push_back( currentState );
-      search( currentState, currentState.heuristic(false),ub, nub, path, bestPath, nbVisitedState );
+      search( currentState,ub, nub, path, bestPath, nbVisitedState );
       path.pop_back(); 
       Move newMove = p.first;
       int first=newMove.first;
       newMove.first=newMove.second;
       newMove.second=first;
       currentState.doMove( newMove );// undo move
-      // *** CHANGE SO IT REVERSES IT PROPERLY !!!!! ***
       if( !bestPath.empty() ) return;
     }
   }
@@ -227,7 +224,7 @@ ida( State&        initialState,
     nub = numeric_limits<int>::max();
 
     cout << "upper bound: " << ub;
-    search( initialState,initialState.heuristic(false), ub, nub, path, bestPath, nbVisitedState );
+    search( initialState, ub, nub, path, bestPath, nbVisitedState );
     cout << " ; nbVisitedState: " << nbVisitedState << endl;
   }
 }
