@@ -44,7 +44,7 @@ addNeighbor( State &currentState, Move &move,
   currentState.doMove(move);
   if( find( path.begin(), path.end(), currentState ) == path.end() )
   {
-    neighbors.push_back( make_pair( move, currentState.heuristic(true) ) );
+    neighbors.push_back( make_pair( move, currentState.heuristic() ) );
   }
   Move newMove = move;
   newMove.first=move.second;
@@ -128,14 +128,11 @@ ida( State&        initialState,
      int&          nbVisitedState )
 {
   int ub;                      // current upper bound
-    cout << "got to beginning of ida " << endl;
-  int nub = initialState.heuristic(true); // next upper bound
-    cout << "got to after heuristic " << endl;
+  int nub = initialState.heuristic(); // next upper bound
   list<State> path;
   path.push_back( initialState ); // the path to the target starts with the source
   while( bestPath.empty() && nub != numeric_limits<int>::max() )
   {
-  cout << "got while loop ida " << endl;
     ub = nub;
     nub = numeric_limits<int>::max();
 
@@ -143,17 +140,15 @@ ida( State&        initialState,
     search( initialState, ub, nub, path, bestPath, nbVisitedState );
     cout << " ; nbVisitedState: " << nbVisitedState << endl;
   }
-  cout << "got to end of ida " << endl;
 }
 
 int
 main()
 {
-  State b=State(8,3);
+  State b=State(13,4);
   b.setInitial();
   list<State> bestPath;
   int nbVisitedState = 0;
-  cout << "got to set initial" << endl;
   auto start = std::chrono::high_resolution_clock::now();
   ida( b,bestPath, nbVisitedState );
   auto finish = std::chrono::high_resolution_clock::now();

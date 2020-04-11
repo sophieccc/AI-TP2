@@ -21,7 +21,7 @@ public:
     // Precondition: 0 <= m.first < getNbStacks(), 0 <= m.second < getNbStacks(), and !emptyStack(m.first)
     // Postrelation: Apply the move (m.first->m.second) to this
     
-    int heuristic(bool second);
+    int heuristic();
     // Return a lower bound on the minimal number of moves necessary to transform this into the final state
     
     void display() const;
@@ -198,7 +198,7 @@ int State::compare(const int* stack2, const int* top2, const int* next2) const{
     return 0;
 }
 
-int State::heuristic(bool second)
+int State::heuristic()
 {
     int mis=0;
     for (int i=0; i<nbBlocs; i++)
@@ -208,18 +208,12 @@ int State::heuristic(bool second)
             mis++;            
         }
     }
-      cout << "got first part of heuristic done" << endl;
-    if(second)
-    {
-        int i = top[nbStacks-1];
-        cout << i << endl;
-        while(next[i]!=-1) {
-                    cout << next[i] << endl;
-            if (next[i]!=i+1) {
-                mis+=2;
-            }
-            i = next[i];
+    int i = top[nbStacks-1];
+    while(next[i]!=-1) {
+        if (next[i]!=i+1) {
+            mis+=2;
         }
+        i = next[i];
     }
 
     return mis;
