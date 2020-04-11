@@ -210,21 +210,15 @@ int State::heuristic(bool second)
     }
     if(second)
     {
-        for (int j=0; j<nbBlocs; j++)
-        {
-            while(next[j]!=-1) {
-                if(stack[j]!=nbStacks-1)
-                {
-                    mis+=2;
-                    break;
-                }
-                j = next[j];
-            }
-            if(j != nbBlocs - 1){ //le dernier bloc n'est pas le bon
+        int i = top[nbStacks-1];
+        while(next[i]!=-1) {
+            if (next[i]!=i+1) {
                 mis+=2;
             }
+            i++;
         }
     }
+
     return mis;
 }
 
