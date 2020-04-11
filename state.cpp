@@ -208,14 +208,17 @@ int State::heuristic(bool second)
             mis++;            
         }
     }
+      cout << "got first part of heuristic done" << endl;
     if(second)
     {
         int i = top[nbStacks-1];
+        cout << i << endl;
         while(next[i]!=-1) {
+                    cout << next[i] << endl;
             if (next[i]!=i+1) {
                 mis+=2;
             }
-            i++;
+            i = next[i];
         }
     }
 

@@ -128,12 +128,14 @@ ida( State&        initialState,
      int&          nbVisitedState )
 {
   int ub;                      // current upper bound
+    cout << "got to beginning of ida " << endl;
   int nub = initialState.heuristic(true); // next upper bound
+    cout << "got to after heuristic " << endl;
   list<State> path;
   path.push_back( initialState ); // the path to the target starts with the source
-
   while( bestPath.empty() && nub != numeric_limits<int>::max() )
   {
+  cout << "got while loop ida " << endl;
     ub = nub;
     nub = numeric_limits<int>::max();
 
@@ -141,16 +143,17 @@ ida( State&        initialState,
     search( initialState, ub, nub, path, bestPath, nbVisitedState );
     cout << " ; nbVisitedState: " << nbVisitedState << endl;
   }
+  cout << "got to end of ida " << endl;
 }
 
 int
 main()
 {
-  State b=State(4,3);
+  State b=State(8,3);
   b.setInitial();
   list<State> bestPath;
   int nbVisitedState = 0;
-  
+  cout << "got to set initial" << endl;
   auto start = std::chrono::high_resolution_clock::now();
   ida( b,bestPath, nbVisitedState );
   auto finish = std::chrono::high_resolution_clock::now();
